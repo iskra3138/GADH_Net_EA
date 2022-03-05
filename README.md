@@ -58,7 +58,7 @@ $ sh ./inference.sh
 ## Evaluate and generate the confusion matrix
 run the following:
 ```
-# need to change
+###### need to change
 docker run -it --rm \
     -v /path/to/GADH_Net_EA/data/Inference:/data \
     -v /path/to/GADH_Net_EA/sem_seg:/metrics \
