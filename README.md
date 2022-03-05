@@ -31,10 +31,14 @@ $ pip install laspy==1.7
 ```
 ### Compile and install pointnet2 & PointSIFT tensorflow utilities
 ```
-$ sh ./tf_ops/3d_interpolation/tf_interpolate_compile_py3.sh
-$ sh ./tf_ops/grouping/tf_grouping_compile_py3.sh
-$ sh ./tf_ops/sampling/tf_sampling_compile_py3.sh
-$ sh ./tf_ops/pointSIFT_op/tf_pointSIFT_compile_py3.sh
+$ cd /path/to/GADH_Net_EA/tf_ops/3d_interpolation
+@ sh ./tf_interpolate_compile_py3.sh
+$ cd /path/to/GADH_Net_EA/tf_ops/grouping
+$ sh ./tf_grouping_compile_py3.sh
+$ cd /path/to/GADH_Net_EA/tf_ops/sampling
+$ sh ./tf_sampling_compile_py3.sh
+$ cd /path/to/GADH_Net_EA/tf_ops/pointSIFT_op
+$ sh ./tf_pointSIFT_compile_py3.sh
 
 ## Create ISPRS dataset
 You can download our processed data：block.pickle, or run the following to generate these data.
