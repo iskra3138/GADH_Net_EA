@@ -16,54 +16,45 @@ classification challenge (DFC 3D) than the baseline (i.e. PointSIFT), which veri
 ability of our model.
 In this repository, we release code and data for training and inferencing our geometry-attentional network.
 ## Installation
-A docker container implementation has been provided for easy setup. The container is based on a tensorflow-gpu image; therefore, nvidia-docker (version 2) must be installed on the host machine. See https://github.com/nvidia/nvidia-docker/wiki/Installation-(version-2.0) for installation instructions.
-
-The docker container image can be bulit by running:
+CUDA9.X, CUDNN and anaconda should be installed in advance.
+### install tensorflow 1.12.0
+``` 
+$ conda install tensorflow-gpu=1.12.0
 ```
-cd /path/to/GADH_Net_EA
-docker build . -t ga_net
+### Install pdal as a conda environment ([https://anaconda.org/conda-forge/pdal](https://anaconda.org/conda-forge/pdal))
 ```
-The following steps assume the container name is ```ga_net```
+$ conda install -c conda-forge/label/cf202003 pdal=1.7
+```
+### Install laspy
+```
+$ pip install laspy==1.7
+```
+### Compile and install pointnet2 & PointSIFT tensorflow utilities
+```
+$ sh ./tf_ops/3d_interpolation/tf_interpolate_compile_py3.sh
+$ sh ./tf_ops/grouping/tf_grouping_compile_py3.sh
+$ sh ./tf_ops/sampling/tf_sampling_compile_py3.sh
+$ sh ./tf_ops/pointSIFT_op/tf_pointSIFT_compile_py3.sh
 
 ## Create ISPRS dataset
 You can download our processed data：block.pickle, or run the following to generate these data.
 ```
-docker run  -it --rm \
-    -v /path/to/GADH_Net_EA/data:/pointnet2/data \
-    -v /path/to/GADH_Net_EA/sem_seg:/pointnet2/sem_seg \
-    ga_net python /pointnet2/sem_seg/create_ISPRS_mydata.py \
-    -i /pointnet2/data/ISPRSdata  -o /pointnet2/data/ISPRSdata/block_pickle
+$ sh ./create_dataset.sh
 ```
 ## Training the model
 To train our geometry-attentional network with deep supervision, run:
 ```
-docker run --runtime=nvidia -it --rm \
-    -v /path/to/GADH_Net_EA/data:/pointnet2/data \
-    -v /path/to/GADH_Net_EA/sem_seg:/pointnet2/sem_seg \
-    -v /path/to/GADH_Net_EA/models:/pointnet2/models \
-    -v /path/to/GADH_Net_EA/utils:/pointnet2/utils \
-    ga_net python /pointnet2/sem_seg/train_multi_gpu_deep.py \
-    --data_dir=data/block_pickle \
-    --log_dir=data/model1 \
-    --model=GADH_Net_EA --extra-dims 3 4 --gpu_num=2
+$ sh ./train.sh
 ```
 ## Running Inference
 To classify point clouds, first run the following to generate intermediate classification results ```Eval_can_out/Eval_can.txt```, and then use knnVote.m to perform Knn voting to get point-wise semantic labels of the original point cloud ```myout1/EVAL_CLS.txt```:
 ```
-docker run --runtime=nvidia -it --rm \
-    -v /path/to/GADH_Net_EA/data:/pointnet2/data \
-    -v /path/to/GADH_Net_EA/sem_seg:/pointnet2/sem_seg \
-    -v /path/to/GADH_Net_EA/models:/pointnet2/models \
-    -v /path/to/GADH_Net_EA/utils:/pointnet2/utils \
-    ga_net python /pointnet2/sem_seg/inference_deep.py \
-    --model=GANH_Net_EA --extra-dims 3 4 \
-    --model_path=data/model1/mode.ckpt-####.ckpt \
-    --input_path=data/Inference \
-    --output_path=data/Inference/Eval_can_out
+$ sh ./inference.sh
 ```
 ## Evaluate and generate the confusion matrix
 run the following:
 ```
+# need to change
 docker run -it --rm \
     -v /path/to/GADH_Net_EA/data/Inference:/data \
     -v /path/to/GADH_Net_EA/sem_seg:/metrics \
