@@ -25,14 +25,14 @@ $ conda install tensorflow-gpu=1.12.0
 ```
 $ conda install -c conda-forge/label/cf202003 pdal=1.7
 ```
-### Install laspy
+### Install laspy and sklearn
 ```
-$ pip install laspy==1.7
+$ pip install laspy==1.7 sklearn
 ```
 ### Compile and install pointnet2 & PointSIFT tensorflow utilities
 ```
 $ cd /path/to/GADH_Net_EA/tf_ops/3d_interpolation
-@ sh ./tf_interpolate_compile_py3.sh
+$ sh ./tf_interpolate_compile_py3.sh
 $ cd /path/to/GADH_Net_EA/tf_ops/grouping
 $ sh ./tf_grouping_compile_py3.sh
 $ cd /path/to/GADH_Net_EA/tf_ops/sampling
@@ -41,7 +41,7 @@ $ cd /path/to/GADH_Net_EA/tf_ops/pointSIFT_op
 $ sh ./tf_pointSIFT_compile_py3.sh
 ```
 ## Create ISPRS dataset
-You can download our processed data：block.pickle, or run the following to generate these data.
+You can download our processed data：block.pickle, refer to ./data/README.md.
 ```
 $ sh ./create_dataset.sh
 ```
